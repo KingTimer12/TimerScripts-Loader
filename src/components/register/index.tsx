@@ -34,7 +34,7 @@ export default function Register({setLogin}: RegisterProps) {
 			<Text align="center" className="mt-5 text-wrap select-none font-thin dark:text-white">
                     Crie uma conta para ter acesso completo ao loader
 			</Text>
-			<Flex direction="column" className="mt-[15%]">
+			<Flex direction="column" className="mt-[10%]">
 				<form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
 					<Flex direction="column">
 						<TextField.Input
@@ -59,8 +59,9 @@ export default function Register({setLogin}: RegisterProps) {
 						className="p-2 py-3 dark:bg-[#202020] bg-slate-200 rounded-lg dark:text-white transition-all duration-300"
 						{...register("confirmPassword")}
 					/>
+					<Button className="mt-2 p-2 rounded-lg bg-neutral-700 hover:bg-neutral-600 dark:text-white cursor-pointer transition-colors duration-300">Registrar</Button>
 				</form>
-				<Button className="mt-6 p-2 rounded-lg bg-neutral-700 hover:bg-neutral-600 dark:text-white cursor-pointer transition-colors duration-300">Registrar</Button>
+	
 				<Flex direction="column" className="mt-6 select-none transition-all duration-300">
 					<span className="text-center dark:text-white">Já tem uma conta?</span>
 					<span className="text-center dark:text-white"><span className="cursor-pointer dark:hover:text-white/80 transition-colors duration-300" onClick={onRegister}>Entrar</span></span>
