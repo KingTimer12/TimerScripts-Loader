@@ -1,8 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Button, Flex, Text, TextField } from "@radix-ui/themes";
+import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
+import { Button, Callout, Flex, Text, TextField } from "@radix-ui/themes";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { motion } from "framer-motion";
 
 interface RegisterProps {
     setLogin: any
@@ -17,6 +20,8 @@ const registerSchema = z.object({
 type RegisterSchema = z.infer<typeof registerSchema>
 
 export default function Register({setLogin}: RegisterProps) {
+	const [warn, setWarn] = useState<string>();
+
 	const onRegister = () => {
 		setLogin(true);
 	};
@@ -26,6 +31,22 @@ export default function Register({setLogin}: RegisterProps) {
 	});
 
 	const onSubmit = (data: RegisterSchema) => {
+		if (!data.username.length) {
+			setWarn("Você precisa colocar o username.");
+			return;
+		}
+		if (!data.password.length) {
+			setWarn("Você precisa colocar uma senha.");
+			return;
+		}
+		if (!data.confirmPassword.length) {
+			setWarn("Você precisa confirmar a senha.");
+			return;
+		}
+		if (data.confirmPassword != data.password) {
+			setWarn("As senhas estão diferentes.");
+			return;
+		}
 		console.log(data);
 	};
 
@@ -62,11 +83,25 @@ export default function Register({setLogin}: RegisterProps) {
 					<Button className="mt-2 p-2 rounded-lg bg-neutral-700 hover:bg-neutral-600 dark:text-white cursor-pointer transition-colors duration-300">Registrar</Button>
 				</form>
 	
-				<Flex direction="column" className="mt-6 select-none transition-all duration-300">
+				<Flex direction="column" className="mt-4 select-none transition-all duration-300">
 					<span className="text-center dark:text-white">Já tem uma conta?</span>
 					<span className="text-center dark:text-white"><span className="cursor-pointer dark:hover:text-white/80 transition-colors duration-300" onClick={onRegister}>Entrar</span></span>
 				</Flex>
 			</Flex>
+			{
+				warn && (
+					<motion.div initial={{ scale:0 }} animate={{ scale:1 }}>
+						<Callout.Root color="red" className="mt-2 flex flex-row items-center p-2 rounded-lg">
+							<Callout.Icon className="mt-[0.16rem]">
+								<ExclamationTriangleIcon />
+							</Callout.Icon>
+							<Callout.Text className="ml-1 select-none text-center">
+								{warn}
+							</Callout.Text>
+						</Callout.Root>
+					</motion.div>
+				)
+			}
 		</>
 	);
 }
