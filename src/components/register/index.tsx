@@ -1,17 +1,33 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Button, Flex, Text, TextField } from "@radix-ui/themes";
 import { useForm } from "react-hook-form";
+import { z } from "zod";
 
 interface RegisterProps {
     setLogin: any
 }
+
+const registerSchema = z.object({
+	username: z.string(),
+	password: z.string(),
+	confirmPassword: z.string()
+});
+
+type RegisterSchema = z.infer<typeof registerSchema>
 
 export default function Register({setLogin}: RegisterProps) {
 	const onRegister = () => {
 		setLogin(true);
 	};
 
-	const { register } = useForm();
+	const { register, handleSubmit } = useForm<RegisterSchema>({
+		resolver: zodResolver(registerSchema)
+	});
+
+	const onSubmit = (data: RegisterSchema) => {
+		console.log(data);
+	};
 
 	return (
 		<>
@@ -19,7 +35,7 @@ export default function Register({setLogin}: RegisterProps) {
                     Crie uma conta para ter acesso completo ao loader
 			</Text>
 			<Flex direction="column" className="mt-[15%]">
-				<form className="flex flex-col gap-4">
+				<form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
 					<Flex direction="column">
 						<TextField.Input
 							variant="soft"
@@ -41,7 +57,7 @@ export default function Register({setLogin}: RegisterProps) {
 						type="password"
 						placeholder="Confirmar Senha"
 						className="p-2 py-3 dark:bg-[#202020] bg-slate-200 rounded-lg dark:text-white transition-all duration-300"
-						{...register("confirm-password")}
+						{...register("confirmPassword")}
 					/>
 				</form>
 				<Button className="mt-6 p-2 rounded-lg bg-neutral-700 hover:bg-neutral-600 dark:text-white cursor-pointer transition-colors duration-300">Registrar</Button>
