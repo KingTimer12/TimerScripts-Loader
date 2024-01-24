@@ -1,8 +1,11 @@
 import { CrossCircledIcon, MinusIcon } from "@radix-ui/react-icons";
 import { Flex, Text, Button } from "@radix-ui/themes";
-import { appWindow } from "@tauri-apps/api/window";
+import { WebviewWindow, appWindow } from "@tauri-apps/api/window";
 
 export default function Decoration() {
+
+	const discord = WebviewWindow.getByLabel("discord");
+	const login = WebviewWindow.getByLabel("login");
 
 	const onMinus = () => {
 		appWindow.minimize();
@@ -10,6 +13,8 @@ export default function Decoration() {
 
 	const onClose = () => {
 		appWindow.close();
+		login?.close();
+		discord?.close();
 	};
 
 	return (
